@@ -38,7 +38,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar'
-import { Slogan } from '@/login/slogan'
+import { Slogan } from '@/pages/login/slogan'
 import * as service from '@/services'
 import { cn } from '@/utils/cn'
 import { pageConfetti } from '@/utils/page-confetti'

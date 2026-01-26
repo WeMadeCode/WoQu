@@ -1,9 +1,9 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 
-import { Document } from '@/components/document'
-import { DocumentList } from '@/components/document-list'
-import Layout from '@/layout'
-import Login from '@/login'
+import { Document } from '@/pages/document'
+import { DocumentList } from '@/pages/document-list'
+import Layout from '@/pages/layout'
+import Login from '@/pages/login'
 
 import { Auth } from './auth'
 
