@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 
 import { Document } from '@/pages/document'
+import { DocumentGraph } from '@/pages/document-graph'
 import { DocumentList } from '@/pages/document-list'
 import Layout from '@/pages/layout'
 import Login from '@/pages/login'
@@ -33,6 +34,10 @@ export const router: PickRouter<A> = createBrowserRouter([
       {
         path: 'doc/:id',
         element: <Document />,
+      },
+      {
+        path: 'doc/graph',
+        element: <DocumentGraph />,
       },
     ],
   },
