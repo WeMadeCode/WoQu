@@ -1,16 +1,57 @@
 import '@blocknote/core/fonts/inter.css'
 import '@blocknote/mantine/style.css'
 
-import type { PartialBlock } from '@blocknote/core'
+import { BlockNoteSchema, defaultInlineContentSpecs, type PartialBlock } from '@blocknote/core'
+import { filterSuggestionItems } from '@blocknote/core/extensions'
 import * as locales from '@blocknote/core/locales'
 import { BlockNoteView } from '@blocknote/mantine'
-import { SuggestionMenuController, useCreateBlockNote } from '@blocknote/react'
+import { type DefaultReactSuggestionItem, SuggestionMenuController, useCreateBlockNote } from '@blocknote/react'
 import { useQuery } from '@tanstack/react-query'
 import { type FC, useState } from 'react'
 import type { WebsocketProvider } from 'y-websocket'
 import * as Y from 'yjs'
 
+import { Mention } from '@/editor/blocks/mention'
+import * as service from '@/services'
 import type { User } from '@/types/api'
+
+const schema = BlockNoteSchema.create({
+  inlineContentSpecs: {
+    ...defaultInlineContentSpecs,
+    mention: Mention,
+  },
+})
+
+const getMentionMenuItems = async (editor: typeof schema.BlockNoteEditor, pageId?: string) => {
+  const items: DefaultReactSuggestionItem[] = []
+  // 获取远程页面
+  const res = await service.fetchPageList()
+  const pages = res.data.pages
+
+  for (const page of pages) {
+    if (page.pageId !== pageId) {
+      items.push({
+        icon: <span>{page.emoji}</span>,
+        title: page.title,
+        onItemClick: () => {
+          editor.insertInlineContent([
+            {
+              type: 'mention',
+              props: {
+                id: page.pageId,
+                title: page.title,
+                icon: page.emoji,
+              },
+            },
+            ' ', // add a space after the mention
+          ])
+        },
+      })
+    }
+  }
+
+  return items
+}
 
 interface DocEditorProps {
   pageId: string
@@ -41,6 +82,7 @@ export const DocEditor: FC<DocEditorProps> = (props: DocEditorProps) => {
   })
 
   const editor = useCreateBlockNote({
+    schema: schema,
     collaboration: {
       provider: provider,
       fragment: doc.getXmlFragment(`document-store-${pageId}`),
@@ -58,7 +100,16 @@ export const DocEditor: FC<DocEditorProps> = (props: DocEditorProps) => {
     },
   })
 
-  return <BlockNoteView editor={editor}></BlockNoteView>
+  const getSlashMenuItems = async (query: string) => {
+    const items = await getMentionMenuItems(editor, pageId)
+    return filterSuggestionItems(items, query)
+  }
+
+  return (
+    <BlockNoteView editor={editor}>
+      <SuggestionMenuController triggerCharacter="@" getItems={getSlashMenuItems} />
+    </BlockNoteView>
+  )
 }
 
 export default DocEditor
