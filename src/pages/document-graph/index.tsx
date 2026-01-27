@@ -1,7 +1,17 @@
 import '@xyflow/react/dist/style.css'
 
 import { useQuery } from '@tanstack/react-query'
-import { applyEdgeChanges, applyNodeChanges, Background, Controls, Edge, EdgeChange, Node, NodeChange, ReactFlow } from '@xyflow/react'
+import {
+  applyEdgeChanges,
+  applyNodeChanges,
+  Background,
+  Controls,
+  type Edge,
+  type EdgeChange,
+  type Node,
+  type NodeChange,
+  ReactFlow,
+} from '@xyflow/react'
 import * as d3 from 'd3-force'
 import { Loader } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
