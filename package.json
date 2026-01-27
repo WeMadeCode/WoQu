@@ -8,7 +8,10 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "docker:deploy": "docker compose -p page-doc -f .devcontainer/docker-compose.deploy.yml up -d",
+    "docker:build-deploy": "pnpm build && pnpm docker:deploy",
+    "docker:deploy:stop": "docker compose -p page-doc -f .devcontainer/docker-compose.deploy.yml down"
   },
   "dependencies": {
     "@blocknote/ariakit": "^0.46.1",
@@ -53,6 +56,7 @@
   "devDependencies": {
     "@eslint/js": "^9.39.1",
     "@tailwindcss/vite": "^4.1.18",
+    "@types/canvas-confetti": "^1.9.0",
     "@types/d3-force": "^3.0.10",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",

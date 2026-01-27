@@ -1,0 +1,57 @@
+# 本地调试示例
+:5173 {
+        # 启用 Zstandard 和 Gzip 压缩，减小传输数据大小
+        encode zstd gzip
+        # 设置缓存控制头，指示客户端不缓存内容
+        header +Cache-Control "max-age=0, private, must-revalidate"
+        # 处理所有以 /api/ 开头的请求
+        handle_path /api/* {
+                # 重写 URL，保留 /api 前缀
+                rewrite * /api{path}
+                # 将请求反向代理到 Docker 服务 page-docs-server 的 8082 端口
+                reverse_proxy page-docs-server:8082
+        }
+        # 移除 URL 末尾的斜杠
+        uri strip_suffix /
+        # 设置静态文件根目录
+        root * /app/dist
+        # 处理其他所有请求
+        handle {
+                # 启用模板功能
+                templates
+                # 尝试查找请求的文件或其 HTML 版本，最后回退到根目录
+                try_files {path}.html {path} /
+                # 启用文件服务
+                file_server
+        }
+}
+
+
+# 用于证书测试
+# {
+#         acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+# }
+
+# 线上地址 ip：8.130.50.156  域名：clouddocs.icu
+clouddocs.icu {
+        encode zstd gzip
+        header +Cache-Control "max-age=0, private, must-revalidate"
+        # 保留 /api 前缀
+        # handle_path /api/* {
+        #         rewrite * {path}
+        #         reverse_proxy 192.168.3.19:3000
+        # }
+        handle_path /api/* {
+                # rewrite * /{path.1}   # 重写去掉 /api 前缀
+                rewrite * /api{path}
+                # reverse_proxy 47.98.248.76:8082
+                reverse_proxy page-docs-server:8082
+        }
+        uri strip_suffix /
+        root * /app/dist
+        handle {
+                templates
+                try_files {path}.html {path} /
+                file_server
+        }
+}

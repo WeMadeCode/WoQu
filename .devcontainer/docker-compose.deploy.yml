@@ -1,0 +1,21 @@
+services:
+  # Caddy 反向代理服务
+  page-docs-caddy:
+    image: caddy:latest
+    container_name: page-docs-caddy
+    ports:
+      - 80:80
+      - 443:443
+      - 443:443/udp
+      - 5173:5173
+    volumes:
+      - ./caddy:/etc/caddy
+      - ../dist:/app/dist
+    command: caddy run --resume --config /etc/caddy/Caddyfile
+    networks:
+      - page-docs-network
+
+# 自定义网络定义
+networks:
+  page-docs-network:
+    external: true
