@@ -2,11 +2,11 @@ import { useQuery } from '@tanstack/react-query'
 import { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { debounce } from 'underscore'
-// import YPartyKitProvider from "y-partykit/provider";
 import { WebsocketProvider } from 'y-websocket'
 import * as Y from 'yjs'
 
 import { AvatarList } from '@/components/avatar-list'
+import { MorePopover } from '@/components/more-popover'
 import { SharePopover } from '@/components/share-popover'
 import { Separator } from '@/components/ui/separator'
 import { SidebarInset, SidebarTrigger } from '@/components/ui/sidebar'
@@ -94,6 +94,7 @@ export const Document = () => {
         <div className="flex flex-row items-center gap-4">
           {remoteUsers && <AvatarList remoteUsers={remoteUsers} />}
           <SharePopover />
+          <MorePopover />
         </div>
       </header>
       <div className="w-[80%] mx-auto">
