@@ -10,7 +10,7 @@ import { MorePopover } from '@/components/more-popover'
 import { SharePopover } from '@/components/share-popover'
 import { Separator } from '@/components/ui/separator'
 import { SidebarInset, SidebarTrigger } from '@/components/ui/sidebar'
-import DocEditor from '@/editor'
+import { DocEditor } from '@/editor'
 import * as service from '@/services'
 import { queryClient } from '@/utils/query-client'
 
