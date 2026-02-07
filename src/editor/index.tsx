@@ -7,13 +7,15 @@ import * as locales from '@blocknote/core/locales'
 import { BlockNoteView } from '@blocknote/mantine'
 import { type DefaultReactSuggestionItem, SuggestionMenuController, useCreateBlockNote } from '@blocknote/react'
 import { useQuery } from '@tanstack/react-query'
-import { type FC, useState } from 'react'
+import { type FC, useEffect, useState } from 'react'
 import type { WebsocketProvider } from 'y-websocket'
 import * as Y from 'yjs'
 
 import { Mention } from '@/editor/blocks/mention'
 import * as service from '@/services'
 import type { User } from '@/types/api'
+
+import { useEditorContext } from './context'
 
 const schema = BlockNoteSchema.create({
   inlineContentSpecs: {
@@ -100,6 +102,12 @@ export const DocEditor: FC<DocEditorProps> = (props: DocEditorProps) => {
       headers: true,
     },
   })
+
+  const { setEditor } = useEditorContext()
+
+  useEffect(() => {
+    setEditor?.(editor)
+  }, [editor, setEditor])
 
   const getSlashMenuItems = async (query: string) => {
     const items = await getMentionMenuItems(editor, pageId)
