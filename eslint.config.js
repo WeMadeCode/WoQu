@@ -28,7 +28,6 @@ export default defineConfig([
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
-      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       'no-console': 'warn',
       'prettier/prettier': 'error',
       'simple-import-sort/imports': 'error',

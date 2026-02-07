@@ -14,6 +14,7 @@ import { Toaster } from 'sonner'
 
 import { queryClient } from '@/utils/query-client'
 
+import { EditorProvider } from './editor/context'
 import { router } from './router'
 
 setDefaultOptions({ locale: zhCN })
@@ -21,8 +22,10 @@ setDefaultOptions({ locale: zhCN })
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Toaster position="top-center" />
-      <RouterProvider router={router} />
+      <EditorProvider>
+        <Toaster position="top-center" />
+        <RouterProvider router={router} />
+      </EditorProvider>
     </QueryClientProvider>
   )
 }

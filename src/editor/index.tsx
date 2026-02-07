@@ -7,13 +7,17 @@ import * as locales from '@blocknote/core/locales'
 import { BlockNoteView } from '@blocknote/mantine'
 import { type DefaultReactSuggestionItem, SuggestionMenuController, useCreateBlockNote } from '@blocknote/react'
 import { useQuery } from '@tanstack/react-query'
-import { type FC, useState } from 'react'
+import { type FC, useEffect, useState } from 'react'
 import type { WebsocketProvider } from 'y-websocket'
 import * as Y from 'yjs'
 
 import { Mention } from '@/editor/blocks/mention'
 import * as service from '@/services'
 import type { User } from '@/types/api'
+
+import { useEditorContext } from './context'
+
+export type BlockNoteEditor = typeof schema.BlockNoteEditor
 
 const schema = BlockNoteSchema.create({
   inlineContentSpecs: {
@@ -22,7 +26,7 @@ const schema = BlockNoteSchema.create({
   },
 })
 
-const getMentionMenuItems = async (editor: typeof schema.BlockNoteEditor, pageId?: string) => {
+const getMentionMenuItems = async (editor: BlockNoteEditor, pageId?: string) => {
   const items: DefaultReactSuggestionItem[] = []
   // 获取远程页面
   const res = await service.fetchPageList()
@@ -63,6 +67,8 @@ interface DocEditorProps {
 export const DocEditor: FC<DocEditorProps> = (props: DocEditorProps) => {
   const { pageId, doc, provider } = props
 
+  const { setEditor } = useEditorContext()
+
   const { data: currentUser } = useQuery<User>({
     queryKey: ['currentUser'],
   })
@@ -99,6 +105,12 @@ export const DocEditor: FC<DocEditorProps> = (props: DocEditorProps) => {
       headers: true,
     },
   })
+
+  useEffect(() => {
+    if (setEditor) {
+      setEditor(editor)
+    }
+  }, [editor, setEditor])
 
   const getSlashMenuItems = async (query: string) => {
     const items = await getMentionMenuItems(editor, pageId)

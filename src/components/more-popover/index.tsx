@@ -1,32 +1,32 @@
-import { useBlockNoteEditor } from '@blocknote/react'
-import { docxDefaultSchemaMappings, DOCXExporter } from '@blocknote/xl-docx-exporter'
-
+// import { docxDefaultSchemaMappings, DOCXExporter } from '@blocknote/xl-docx-exporter'
 import download from '@/assets/download.svg'
 import more from '@/assets/more.svg'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { useEditorContext } from '@/editor/context'
 
 export function MorePopover() {
-  const editor = useBlockNoteEditor()
+  // 从上下文获取编辑器实例
+  const { editor } = useEditorContext()
+  // const editor = useBlockNoteEditor()
+  console.log('1-------', editor)
   // Exports the editor content to DOCX and downloads it.
   const onDownloadClick = async () => {
     // 在这里如何 拿到全局创建的编辑器？
-
-    const exporter = new DOCXExporter(editor.state.schema, docxDefaultSchemaMappings)
-    const blob = await exporter.toBlob(editor.document)
-
-    const link = document.createElement('a')
-    link.href = window.URL.createObjectURL(blob)
-    link.download = 'My Document (blocknote export).docx'
-    document.body.appendChild(link)
-    link.dispatchEvent(
-      new MouseEvent('click', {
-        bubbles: true,
-        cancelable: true,
-        view: window,
-      })
-    )
-    link.remove()
-    window.URL.revokeObjectURL(link.href)
+    // const exporter = new DOCXExporter(editor.state.schema, docxDefaultSchemaMappings)
+    // const blob = await exporter.toBlob(editor.document)
+    // const link = document.createElement('a')
+    // link.href = window.URL.createObjectURL(blob)
+    // link.download = 'My Document (blocknote export).docx'
+    // document.body.appendChild(link)
+    // link.dispatchEvent(
+    //   new MouseEvent('click', {
+    //     bubbles: true,
+    //     cancelable: true,
+    //     view: window,
+    //   })
+    // )
+    // link.remove()
+    // window.URL.revokeObjectURL(link.href)
   }
 
   return (
