@@ -1,7 +1,7 @@
 import '@blocknote/core/fonts/inter.css'
 import '@blocknote/mantine/style.css'
 
-import { type BlockNoteEditor, BlockNoteSchema, defaultInlineContentSpecs, type PartialBlock } from '@blocknote/core'
+import { BlockNoteSchema, defaultInlineContentSpecs, type PartialBlock } from '@blocknote/core'
 import { filterSuggestionItems } from '@blocknote/core/extensions'
 import * as locales from '@blocknote/core/locales'
 import { BlockNoteView } from '@blocknote/mantine'
@@ -17,6 +17,8 @@ import type { User } from '@/types/api'
 
 import { useEditorContext } from './context'
 
+export type BlockNoteEditor = typeof schema.BlockNoteEditor
+
 const schema = BlockNoteSchema.create({
   inlineContentSpecs: {
     ...defaultInlineContentSpecs,
@@ -24,7 +26,7 @@ const schema = BlockNoteSchema.create({
   },
 })
 
-const getMentionMenuItems = async (editor: typeof schema.BlockNoteEditor, pageId?: string) => {
+const getMentionMenuItems = async (editor: BlockNoteEditor, pageId?: string) => {
   const items: DefaultReactSuggestionItem[] = []
   // 获取远程页面
   const res = await service.fetchPageList()
